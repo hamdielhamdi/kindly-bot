@@ -79,5 +79,12 @@ curl --header "Content-Type: application/json" \
   --data '{"user_id":"1"}' \
   http://localhost:5000/api/conversation/start
 ```
+
+## test
+To run the tests cases  : 
+```
+cd kindly-bot\bot\test
+python testcases.py
+```
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
