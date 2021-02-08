@@ -86,8 +86,13 @@ class Bot:
 		possible_replies = []
 		# this will iter thru all samples /keywaors base on dialog_type
 		for dict_ in memory['dialogues']:
+
 			# check dialogue_type = dialog_type selected oneof [SAMPLES, keywords]
 			if dict_['dialogue_type'] == dialog_type:
+				
+				if 'parent_id' in dict_:
+					parent_id = dict_['parent_id']
+
 				# access base-on language key oneof [saples, keywords] 
 				key = self.mapper_(dialog_type)
 				list_items = dict_[key][language]
@@ -102,4 +107,4 @@ class Bot:
 		if len(possible_replies)> 0:
 			return self.SimMes.sort_list_dict(possible_replies, 'mesure')[0]['reply']
 		return None
-		
+	

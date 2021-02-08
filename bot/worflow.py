@@ -76,20 +76,24 @@ def message():
 				return jsonify(user_id = user_id,message=f"user with id = {user_id} has no language set, please use /api/conversation/start to set the language"), 404
 			lang = user_stored_data['language']
 
-			sample = bot.conversation_handler(message = request.json['message'],
+			# check samples
+			response = bot.conversation_handler(message = request.json['message'],
 										memory = bot_memory,
 										language = lang,
 										dialog_type = "SAMPLES" )
-			if not sample :
-				 keyword = bot.conversation_handler(message = request.json['message'],
+			# no samples , then check keywords
+			if not response :
+				 response = bot.conversation_handler(message = request.json['message'],
 										memory = bot_memory,
 										language = lang,
 										dialog_type = "KEYWORDS" )
-			if not keyword : 
-				fallback = greeting_fallback_handler(memory = bot_memory,
-								language=language_['reason'],
-								dialog_type = 'fallback')
-				return jsonify(user_id = user_id, message=fallback), 200
+			# no keywods , return fallbacks
+			if not response : 
+				response = bot.greeting_fallback_handler(memory = bot_memory,
+								language=lang,
+								dialog_type = 'fallbacks')
+
+				return jsonify(user_id = user_id, message=response), 200
 			return jsonify(message=response.encode('utf-8')), 200
 		return jsonify(message = "Please check your json payload, message was not found !! "), 404
 
