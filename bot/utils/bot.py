@@ -3,7 +3,7 @@ import json
 import os 
 
 class Bot:
-	def __init__(self,storage_name,SimMes ):
+	def __init__(self,storage_name = None,SimMes = None ):
 		self.SimMes = SimMes
 		self.storage_name = storage_name
 		self.touch_if_not_exist()
@@ -65,8 +65,8 @@ class Bot:
 				return user
 		return (user if found else found)
 
-	def greeting_handler(self, memory, language, dialog_type):
-		# valid for greeting and fallback
+	def greeting_fallback_handler(self, memory, language, dialog_type):
+		# valid for greeting or fallback
 		conversation_data = memory[dialog_type][0]
 		replies = conversation_data['replies'][language]
 		return  self.make_choice(replies)
@@ -98,7 +98,6 @@ class Bot:
 					# pickup a rondom response and memorize it 
 					result.update({'reply':self.make_choice(dict_['replies'][language])})
 					possible_replies.append(result)
-		print(possible_replies)
 		# if we have possible condidate from samples first, return romdom  response
 		if len(possible_replies)> 0:
 			return self.SimMes.sort_list_dict(possible_replies, 'mesure')[0]['reply']
